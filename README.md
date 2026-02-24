@@ -1,8 +1,8 @@
-# 👷‍♂️ PPE Detection System - Industrial Safety
+# PPE Detection System - Industrial Safety
 
 Bienvenido al repositorio oficial del **Sistema de Detección de Equipo de Protección Personal (EPP)**. Este proyecto es una iniciativa de consultoría aplicada a la seguridad industrial, utilizando visión artificial avanzada para la mitigación de riesgos laborales.
 
-## 📋 Descripción del Proyecto
+## Descripción del Proyecto
 El objetivo principal es desarrollar y desplegar un modelo de Deep Learning basado en la arquitectura **YOLO (You Only Look Once)** para la detección automatizada de EPP en entornos industriales. El sistema está diseñado para identificar:
 * **Cascos de seguridad**
 * **Chalecos de alta visibilidad**
@@ -12,7 +12,7 @@ Este desarrollo busca reducir los tiempos de supervisión manual y aumentar el c
 
 ---
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 Basado en el estándar de nuestra organización, el repositorio se organiza de la siguiente manera:
 
 * **`data/`**: 
@@ -26,7 +26,7 @@ Basado en el estándar de nuestra organización, el repositorio se organiza de l
 
 ---
 
-## 🚀 Hoja de Ruta (Roadmap)
+## Hoja de Ruta (Roadmap)
 - [ ] **Fase 1: Data Engineering** - Recopilación y etiquetado de imágenes (vía Roboflow/CVAT).
 - [ ] **Fase 2: Model Training** - Entrenamiento mediante Transfer Learning con YOLO.
 - [ ] **Fase 3: Prototipado de Inferencia** - Implementación de detección sobre imágenes estáticas.
@@ -35,7 +35,7 @@ Basado en el estándar de nuestra organización, el repositorio se organiza de l
 
 ---
 
-## 🛠️ Instalación y Configuración
+## Instalación y Configuración
 1. Clona este repositorio:
    ```bash
    git clone [https://github.com/Consultira-MCD/ppe-detection-system.git](https://github.com/Consultira-MCD/ppe-detection-system.git)
