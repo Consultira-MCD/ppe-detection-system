@@ -205,3 +205,25 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ==========================================
+# CONFIGURACIÓN DEL PROYECTO (YOLO, MAC & DATOS)
+# ==========================================
+
+# 1. Archivos del sistema de macOS (para no subir basura de tu compu)
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# 2. Pesos de modelos y carpetas de YOLO (MUY IMPORTANTE)
+*.pt
+*.onnx
+*.engine
+runs/
+
+# 3. Datos e imágenes locales
+# Mantiene la estructura de tu plantilla, pero ignora el contenido pesado
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
