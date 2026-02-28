@@ -1,0 +1,16 @@
+names:
+- helmet
+- no-helmet
+- no-vest
+- person
+- vest
+nc: 5
+roboflow:
+  license: CC BY 4.0
+  project: construction-safety-gsnvb-qzleh
+  url: https://universe.roboflow.com/franciscos-workspace-ukujq/construction-safety-gsnvb-qzleh/dataset/1
+  version: 1
+  workspace: franciscos-workspace-ukujq
+test: ../test/images
+train: ../train/images
+val: ../valid/images
