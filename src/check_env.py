@@ -1,7 +1,9 @@
 """
 Script de validación de entorno multiplataforma.
-Detecta automáticamente el hardware disponible (CUDA para Windows/Linux con NVIDIA, 
-MPS para Mac Apple Silicon, o CPU como respaldo) y ejecuta una prueba de inferencia con YOLO.
+Detecta automáticamente el hardware disponible 
+(CUDA para Windows/Linux con NVIDIA, 
+MPS para Mac Apple Silicon, o CPU como respaldo) y
+ejecuta una prueba de inferencia con YOLO.
 """
 
 import torch
