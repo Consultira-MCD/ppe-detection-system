@@ -5,7 +5,7 @@ def iniciar_camara():
     print("Cargando el modelo entrenado...")
     # Asegúrate de que esta ruta apunte a donde está tu best.pt
     # Como el script está en src/, subimos un nivel con '../'
-    modelo = YOLO('runs/models/yolov8_epp_v1/weights/best.pt')
+    modelo = YOLO('models/yolov8_epp_v1/weights/best.pt')
 
     print("Iniciando cámara web... Presiona la tecla 'q' en tu teclado para cerrar la ventana.")
     # El 0 indica la cámara web principal de la Mac
