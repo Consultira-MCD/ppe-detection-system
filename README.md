@@ -1,39 +1,59 @@
 # PPE Detection System - Industrial Safety
 
-Bienvenido al repositorio oficial del **Sistema de Detección de Equipo de Protección Personal (EPP)**. Este proyecto es una iniciativa de consultoría aplicada a la seguridad industrial, utilizando visión artificial avanzada para la mitigación de riesgos laborales.
+> **Estado Actual del Proyecto:** 🚧 **Fase 2 en progreso (Expansión de Datos y Mitigación de Sesgos)**
+
+Bienvenido al repositorio oficial del **Sistema de Detección de Equipo de Protección Personal (EPP)**. Este proyecto es una iniciativa de consultoría aplicada a la automatización de la seguridad industrial, utilizando visión artificial para la mitigación proactiva de riesgos laborales.
 
 ## Descripción del Proyecto
-El objetivo principal es desarrollar y desplegar un modelo de Deep Learning basado en la arquitectura **YOLO (You Only Look Once)** para la detección automatizada de EPP en entornos industriales. El sistema está diseñado para identificar:
-* **Cascos de seguridad**
-* **Chalecos de alta visibilidad**
-* **Lentes de protección / Goggles**
 
-Este desarrollo busca reducir los tiempos de supervisión manual y aumentar el cumplimiento de las normativas de seguridad (como la NOM en México o estándares OSHA) mediante el monitoreo inteligente de imágenes y video en tiempo real.
+El objetivo principal es desarrollar y desplegar un sistema unificado basado en la arquitectura **YOLOv8** para la detección automatizada de EPP. El sistema evalúa el cumplimiento en tiempo real, con una estrategia de integración por etapas:
 
----
+**Implementación Actual (v1.0):**
+* 👷 Personas (Trabajadores)
+* 🟡 Protección de Cabeza: Cascos de seguridad (`helmet` / `no-helmet`)
+* 🦺 Protección de Torso: Chalecos de alta visibilidad (`vest` / `no-vest`)
 
-## Estructura del Proyecto
-Basado en el estándar de nuestra organización, el repositorio se organiza de la siguiente manera:
+**Expansión Planificada (v2.0):**
+* 🧤 Protección de Manos: Guantes de seguridad
+* 🥽 Protección Facial: Lentes/Goggles y Mascarillas
 
-* **`data/`**: 
-    * `raw/`: Imágenes originales sin procesar y archivos de anotación.
-    * `processed/`: Dataset optimizado, redimensionado y aumentado listo para entrenamiento.
-* **`notebooks/`**: Experimentos en Jupyter/Colab para el Análisis Exploratorio de Datos (EDA) y el entrenamiento del modelo.
-* **`src/`**: Código fuente de la aplicación, incluyendo scripts de inferencia para webcam y lógica de procesamiento de video.
-* **`models/`**: Pesos entrenados (`.pt` o `.onnx`) y archivos de configuración de hiperparámetros.
-* **`reports/`**: Reportes de performance, matrices de confusión, curvas PR y métricas de precisión (mAP).
-* **`docs/`**: Documentación técnica, manuales de usuario y referencias industriales.
+El sistema separa la detección visual de la lógica de negocio, permitiendo configurar qué implementos son obligatorios u opcionales dependiendo de la zona y normativas (ej. NOM-017 de la STPS).
 
----
+## Estructura del Repositorio
 
-## Hoja de Ruta (Roadmap)
-- [ ] **Fase 1: Data Engineering** - Recopilación y etiquetado de imágenes (vía Roboflow/CVAT).
-- [ ] **Fase 2: Model Training** - Entrenamiento mediante Transfer Learning con YOLO.
-- [ ] **Fase 3: Prototipado de Inferencia** - Implementación de detección sobre imágenes estáticas.
-- [ ] **Fase 4: Real-time Deployment** - Integración con feed de video/webcam mediante OpenCV.
-- [ ] **Fase 5: Reporting** - Generación de logs de cumplimiento e incidencias detectadas.
+* `data/raw/`: Imágenes originales sin procesar y archivos de anotación.
+* `data/processed/`: Dataset optimizado y con Data Augmentation para evitar sesgos de color.
+* `notebooks/`: Entorno de experimentación para el entrenamiento y Análisis Exploratorio de Datos (EDA).
+* `src/`: Código fuente de producción y scripts de inferencia en tiempo real.
+* `models/`: Pesos entrenados y versiones del modelo (ej. `v1_base.pt`, `v2_full.pt`).
+* `reports/`: Gráficas de rendimiento (curvas PR, matrices de confusión, mAP).
+* `docs/`: Documentación técnica, manuales y presentaciones comerciales.
 
----
+## Hoja de Ruta (Roadmap) del Producto
+
+### Fase 1: Prueba de Concepto (Motor Base v1.0)
+- [x] Adquisición y formateo del dataset inicial (Roboflow).
+- [x] Entrenamiento del modelo base mediante Transfer Learning (YOLOv8n).
+- [x] Inferencia exitosa en tiempo real mediante webcam local.
+
+### Fase 2: Expansión de Datos y Stress Test 
+- [ ] **Mitigación de sesgo de color:** Implementar Data Augmentation (Hue/Saturation) para detectar chalecos de cualquier color (azul, rosa, negro), forzando al modelo a aprender patrones y no solo colores de alta visibilidad.
+- [ ] **Ampliación de clases (v2.0):** Integrar imágenes etiquetadas con guantes, lentes y mascarillas al dataset.
+- [ ] Pruebas de inferencia sobre videos pregrabados de obras y minas reales.
+
+### Fase 3: Lógica de Negocio y Alertas
+- [ ] Implementación de tracking (seguimiento de IDs únicos por trabajador).
+- [ ] Programación de reglas lógicas de infracción (ej. "Alerta si ID_4 está sin casco por > 3 segundos").
+- [ ] Generación automática de logs e incidencias.
+
+### Fase 4: Dashboard y Visualización (Cliente Final)
+- [ ] Desarrollo de interfaz gráfica web (Streamlit).
+- [ ] Integración de métricas en vivo (Trabajadores seguros vs. En riesgo).
+- [ ] Selector de fuentes de video.
+
+### Fase 5: Despliegue en el Borde (Edge Computing)
+- [ ] Contenerización del entorno (Docker).
+- [ ] Optimización del modelo para hardware de bajo costo.
 
 ## Instalación y Configuración
 1. Clona este repositorio:
