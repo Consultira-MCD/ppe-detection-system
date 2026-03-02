@@ -1,0 +1,22 @@
+names:
+- boots
+- face_mask
+- face_nomask
+- glasses
+- hand_glove
+- hand_noglove
+- head_helmet
+- head_nohelmet
+- person
+- shoes
+- vest
+nc: 11
+roboflow:
+  license: CC BY 4.0
+  project: ppe10.3-7n1zg
+  url: https://universe.roboflow.com/franciscos-workspace-ukujq/ppe10.3-7n1zg/dataset/1
+  version: 1
+  workspace: franciscos-workspace-ukujq
+test: ../test/images
+train: ../train/images
+val: ../valid/images
