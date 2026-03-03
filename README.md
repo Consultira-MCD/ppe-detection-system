@@ -47,9 +47,9 @@ El sistema separa la detección visual de la lógica de negocio, permitiendo con
 
 ### Fase 3: Lógica de Negocio y Alertas
 
-- [ ] Implementación de tracking (seguimiento de IDs únicos por trabajador).
-- [ ] Programación de reglas lógicas de infracción (ej. "Alerta si ID_4 está sin casco por > 3 segundos").
-- [ ] Generación automática de logs e incidencias.
+- [x] Implementación de tracking (seguimiento de IDs únicos por trabajador).
+- [x] Programación de reglas lógicas de infracción (ej. "Alerta si ID_4 está sin casco por > 3 segundos").
+- [x] Generación automática de logs e incidencias.
 
 ### Fase 4: Dashboard y Visualización (Cliente Final)
 
