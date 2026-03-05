@@ -53,9 +53,9 @@ El sistema separa la detección visual de la lógica de negocio, permitiendo con
 
 ### Fase 4: Dashboard y Visualización (Cliente Final)
 
-- [ ] Desarrollo de interfaz gráfica web (Streamlit).
-- [ ] Integración de métricas en vivo (Trabajadores seguros vs. En riesgo).
-- [ ] Selector de fuentes de video.
+- [x] Desarrollo de interfaz gráfica web (Streamlit).
+- [x] Integración de métricas en vivo (Trabajadores seguros vs. En riesgo).
+- [x] Selector de fuentes de video.
 
 ### Fase 5: Despliegue en el Borde (Edge Computing)
 
