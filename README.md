@@ -1,6 +1,6 @@
 # PPE Detection System - Industrial Safety
 
-> **Estado Actual del Proyecto:** 🚧 **Fase 3 en progreso (Lógica de Negocio y Alertas)**
+> **Estado Actual del Proyecto:** 🚧 **Fase 4 en progreso (Dashboard y Visualización)**
 
 Bienvenido al repositorio oficial del **Sistema de Detección de Equipo de Protección Personal (EPP)**. Este proyecto es una iniciativa de consultoría aplicada a la automatización de la seguridad industrial, utilizando visión artificial para la mitigación proactiva de riesgos laborales.
 

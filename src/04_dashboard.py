@@ -1,6 +1,4 @@
 """
-Fase 1 del proyecto de la consultoría.
-
 Script del Panel de Monitoreo Web (Dashboard) interactivo.
 Utiliza la biblioteca Streamlit para construir una interfaz gráfica en el navegador.
 Permite seleccionar la fuente de video (Webcam o carga de MP4 local), carga el modelo
