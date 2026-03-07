@@ -1,6 +1,4 @@
 """
-Fase 1 del proyecto de la consultoría.
-
 Script principal de la interfaz de usuario personalizada (Custom UI).
 Ejecuta el modelo YOLO para detectar equipo de protección personal (EPP),
 evalúa en tiempo real si el personal cumple con el equipo completo y 
