@@ -1,7 +1,7 @@
 """
 ARGUS VISION — Dashboard Operativo HSE (Health, Safety & Environment)
 Sistema de monitoreo en tiempo real de Equipos de Protección Personal (EPP)
-utilizando YOLOv8 + OpenCV. Detecta: Casco, Chaleco y Lentes de seguridad.
+utilizando YOLOv8 + OpenCV. Detecta: Casco, Chaleco, Lentes y Mascarilla.
 Registra infracciones con evidencia fotográfica y cooldown anti-spam de 30s.
 """
 
@@ -154,6 +154,7 @@ st.markdown(f"""
             <span style="background:#FF4B4B22; color:#FF4B4B; border:1px solid #FF4B4B55; border-radius:4px; padding:2px 10px; font-size:10px; font-weight:700; letter-spacing:1px;">⛑ CASCO</span>
             <span style="background:#FF8C0022; color:#FF8C00; border:1px solid #FF8C0055; border-radius:4px; padding:2px 10px; font-size:10px; font-weight:700; letter-spacing:1px;">🦺 CHALECO</span>
             <span style="background:#4fc3f722; color:#4fc3f7; border:1px solid #4fc3f755; border-radius:4px; padding:2px 10px; font-size:10px; font-weight:700; letter-spacing:1px;">🥽 LENTES</span>
+            <span style="background:#e040fb22; color:#e040fb; border:1px solid #e040fb55; border-radius:4px; padding:2px 10px; font-size:10px; font-weight:700; letter-spacing:1px;">😷 MASCARILLA</span>
         </div>
     </div>
     <div style="text-align: right; font-size: 11px; color: #404050;">
@@ -435,12 +436,13 @@ def actualizar_dashboard():
     if os.path.exists(RUTA_CSV):
         df = pd.read_csv(
             RUTA_CSV,
-            names=['Fecha', 'Hora', 'ID_Persona', 'Chaleco', 'Casco', 'Lentes', 'Nombre_Foto'],
+            names=['Fecha', 'Hora', 'ID_Persona', 'Chaleco', 'Casco', 'Lentes', 'Mascarilla', 'Nombre_Foto'],
             header=0
         )
-        df['Chaleco'] = pd.to_numeric(df['Chaleco'], errors='coerce').fillna(0)
-        df['Casco']   = pd.to_numeric(df['Casco'],   errors='coerce').fillna(0)
-        df['Lentes']  = pd.to_numeric(df['Lentes'],  errors='coerce').fillna(0)
+        df['Chaleco']    = pd.to_numeric(df['Chaleco'],    errors='coerce').fillna(0)
+        df['Casco']      = pd.to_numeric(df['Casco'],      errors='coerce').fillna(0)
+        df['Lentes']     = pd.to_numeric(df['Lentes'],     errors='coerce').fillna(0)
+        df['Mascarilla'] = pd.to_numeric(df['Mascarilla'], errors='coerce').fillna(0)
 
         if not df.empty:
             total        = len(df)
@@ -471,12 +473,13 @@ def actualizar_dashboard():
             # B) GRÁFICA DE BARRAS — construida como variable string
             # --------------------------------------------------
             totales = {
-                'Sin Casco':   int(df['Casco'].sum()),
-                'Sin Chaleco': int(df['Chaleco'].sum()),
-                'Sin Lentes':  int(df['Lentes'].sum()),
+                'Sin Casco':       int(df['Casco'].sum()),
+                'Sin Chaleco':     int(df['Chaleco'].sum()),
+                'Sin Lentes':      int(df['Lentes'].sum()),
+                'Sin Mascarilla':  int(df['Mascarilla'].sum()),
             }
-            iconos   = ['⛑', '🦺', '🥽']
-            colores_barra = ['#FF4B4B', '#FF8C00', '#4fc3f7']
+            iconos   = ['⛑', '🦺', '🥽', '😷']
+            colores_barra = ['#FF4B4B', '#FF8C00', '#4fc3f7', '#e040fb']
             max_val  = max(totales.values()) if max(totales.values()) > 0 else 1
 
             html_barras = (
@@ -518,7 +521,7 @@ def actualizar_dashboard():
                         'border:1px solid #69f0ae44;border-radius:4px;padding:1px 9px;'
                         'font-size:10px;font-weight:800;">OK</span>')
 
-            headers_list = ['Fecha', 'Hora', 'ID', 'Casco', 'Chaleco', 'Lentes', 'Evidencia']
+            headers_list = ['Fecha', 'Hora', 'ID', 'Casco', 'Chaleco', 'Lentes', 'Mascarilla', 'Evidencia']
             th_html = "".join([
                 f'<th style="padding:9px 10px;background:#1a0a0a;color:#FF4B4B;font-size:9px;'
                 f'letter-spacing:2px;font-weight:800;text-transform:uppercase;white-space:nowrap;'
@@ -540,6 +543,7 @@ def actualizar_dashboard():
                     f'<td style="padding:7px 10px;text-align:center;">{badge_epp(fila["Casco"])}</td>'
                     f'<td style="padding:7px 10px;text-align:center;">{badge_epp(fila["Chaleco"])}</td>'
                     f'<td style="padding:7px 10px;text-align:center;">{badge_epp(fila["Lentes"])}</td>'
+                    f'<td style="padding:7px 10px;text-align:center;">{badge_epp(fila["Mascarilla"])}</td>'
                     f'<td style="padding:7px 10px;color:#404050;font-size:10px;font-family:monospace;">{foto_corta}</td>'
                     '</tr>'
                 )
@@ -602,9 +606,12 @@ def _procesar_frame(frame, cam_label, cam_color_bgr):
     resultados = modelo.track(frame, conf=0.6, device=device, persist=True, verbose=False)
     cajas = resultados[0].boxes
 
-    coordenadas_personas = []
-    coordenadas_chalecos, coordenadas_cascos, coordenadas_lentes = [], [], []
-    estado_infraccion = {'ID': -1, 'Chaleco': 0, 'Casco': 0, 'Lentes': 0}
+    coordenadas_personas   = []
+    coordenadas_chalecos   = []
+    coordenadas_cascos     = []
+    coordenadas_lentes     = []
+    coordenadas_mascarilla = []
+    estado_infraccion = {'ID': -1, 'Chaleco': 0, 'Casco': 0, 'Lentes': 0, 'Mascarilla': 0}
     hay_infraccion = False
 
     if cajas is not None and len(cajas) > 0:
@@ -614,12 +621,18 @@ def _procesar_frame(frame, cam_label, cam_color_bgr):
             nombre_yolo = nombres_clases[clase_id]
             track_id    = int(caja.id[0]) if caja.id is not None else -1
 
+            # Recopilar coordenadas por tipo de EPP
             if nombre_yolo == 'person':       coordenadas_personas.append((x1, y1, x2, y2, track_id))
             elif nombre_yolo == 'vest':        coordenadas_chalecos.append((x1, y1, x2, y2))
             elif nombre_yolo == 'head_helmet': coordenadas_cascos.append((x1, y1, x2, y2))
             elif nombre_yolo == 'glasses':     coordenadas_lentes.append((x1, y1, x2, y2))
+            elif nombre_yolo == 'face_mask':   coordenadas_mascarilla.append((x1, y1, x2, y2))
 
-            texto_mostrar, color = CONFIGURACION_VISUAL.get(nombre_yolo, (nombre_yolo.upper(), (128, 128, 128)))
+            # Solo dibujar cajas para clases conocidas; ignorar silenciosamente el resto (guantes, etc.)
+            if nombre_yolo not in CONFIGURACION_VISUAL:
+                continue
+
+            texto_mostrar, color = CONFIGURACION_VISUAL[nombre_yolo]
             if nombre_yolo == 'person' and track_id != -1:
                 texto_mostrar = f"PERSONA #{track_id}"
 
@@ -628,19 +641,21 @@ def _procesar_frame(frame, cam_label, cam_color_bgr):
 
         for (px1, py1, px2, py2, p_id) in coordenadas_personas:
             lista_faltas_texto = []
-            falta_chaleco = 1 if not tiene_equipo(px1, py1, px2, py2, coordenadas_chalecos) else 0
-            falta_casco   = 1 if not tiene_equipo(px1, py1, px2, py2, coordenadas_cascos)   else 0
-            falta_lentes  = 1 if not tiene_equipo(px1, py1, px2, py2, coordenadas_lentes)   else 0
+            falta_chaleco    = 1 if not tiene_equipo(px1, py1, px2, py2, coordenadas_chalecos)   else 0
+            falta_casco      = 1 if not tiene_equipo(px1, py1, px2, py2, coordenadas_cascos)      else 0
+            falta_lentes     = 1 if not tiene_equipo(px1, py1, px2, py2, coordenadas_lentes)      else 0
+            falta_mascarilla = 1 if not tiene_equipo(px1, py1, px2, py2, coordenadas_mascarilla)  else 0
 
-            if falta_chaleco: lista_faltas_texto.append("Chaleco")
-            if falta_casco:   lista_faltas_texto.append("Casco")
-            if falta_lentes:  lista_faltas_texto.append("Lentes")
+            if falta_chaleco:    lista_faltas_texto.append("Chaleco")
+            if falta_casco:      lista_faltas_texto.append("Casco")
+            if falta_lentes:     lista_faltas_texto.append("Lentes")
+            if falta_mascarilla: lista_faltas_texto.append("Mascarilla")
 
             if lista_faltas_texto:
                 hay_infraccion = True
                 estado_infraccion = {
-                    'ID': p_id, 'Chaleco': falta_chaleco,
-                    'Casco': falta_casco, 'Lentes': falta_lentes
+                    'ID': p_id, 'Chaleco': falta_chaleco, 'Casco': falta_casco,
+                    'Lentes': falta_lentes, 'Mascarilla': falta_mascarilla
                 }
                 texto_faltas = "SIN: " + ", ".join(lista_faltas_texto)
                 cv2.putText(frame, texto_faltas, (px1 + 5, py1 + 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
@@ -669,7 +684,8 @@ def _registrar_infraccion(frame_limpio, estado_infraccion, sufijo_foto=""):
         escritor.writerow([
             fecha_str, hora_str, estado_infraccion['ID'],
             estado_infraccion['Chaleco'], estado_infraccion['Casco'],
-            estado_infraccion['Lentes'], nombre_foto
+            estado_infraccion['Lentes'], estado_infraccion['Mascarilla'],
+            nombre_foto
         ])
 
 
