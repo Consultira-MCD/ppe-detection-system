@@ -1,0 +1,40 @@
+# Entornos virtuales y caché Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Datos generados en runtime (se montan como volumen en producción)
+evidencias/
+
+# Notebooks de experimentación (no son código de producción)
+notebooks/
+
+# Datos crudos y reportes
+data/
+reports/
+miscellaneous/
+
+# Archivos de desarrollo y configuración local
+.git/
+.gitignore
+contexto_claude.md
+CLAUDE.md
+
+# Modelo v1 (baseline, no en producción) y modelo v3 experimental
+# Solo se incluye models/yolov8_epp_v2_produccion/
+models/yolov8_epp_v1/
+models/yolov8_epp_v3/
+
+# Pesos sueltos en la raíz
+yolov8n.pt
+
+# macOS
+.DS_Store
+__MACOSX/
+
+# IDEs
+.vscode/
+.idea/

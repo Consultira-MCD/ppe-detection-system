@@ -31,7 +31,7 @@ from ultralytics import YOLO
 # CONFIGURACIÓN PRINCIPAL
 # ==========================================
 # Ruta predeterminada desde donde se leerán los pesos (el modelo entrenado a usar)
-MODEL_PATH = "models/yolov8_epp_v2/weights/best.pt"
+MODEL_PATH = "models/yolov8_epp_v2_produccion/weights/best.pt"
 
 # Índice de la cámara que utilizará OpenCV (0 para la webcam principal nativa)
 WEBCAM_INDEX = 0
@@ -59,7 +59,7 @@ if not os.path.exists(RUTA_CSV):
         # Iniciamos un escritor de CSV en ese archivo
         escritor = csv.writer(archivo)
         # Escribimos de inmediato la primera fila (los descriptores y variables formato One-Hot)
-        escritor.writerow(["Fecha", "Hora", "ID_Persona", "Falta_Chaleco", "Falta_Casco", "Falta_Lentes", "Falta_Guantes", "Nombre_Foto"])
+        escritor.writerow(["Fecha", "Hora", "ID_Persona", "Chaleco", "Casco", "Lentes", "Mascarilla", "Nombre_Foto"])
 
 # Diccionario configurativo visual de etiquetas, agrupado por el string predictivo de YOLO
 # Mapea (Nombre amigable, Color_BBR_para_OpenCV_en_Tupla)
@@ -163,11 +163,11 @@ def main():
         coordenadas_chalecos = []
         coordenadas_cascos = []
         coordenadas_lentes = []
-        coordenadas_guantes = []
+        coordenadas_mascarilla = []
 
-        # Diccionario One-Hot Default para iniciar la evaluación del frame asumiendo todo limpio. 
+        # Diccionario One-Hot Default para iniciar la evaluación del frame asumiendo todo limpio.
         # (Usaremos variables de tipo 1 / 0 para facilitar ciencia de datos)
-        estado_infraccion = {'ID': -1, 'Chaleco': 0, 'Casco': 0, 'Lentes': 0, 'Guantes': 0}
+        estado_infraccion = {'ID': -1, 'Chaleco': 0, 'Casco': 0, 'Lentes': 0, 'Mascarilla': 0}
         
         # Bandera de estado temporal que activaremos si alguien no tiene EPP
         hay_infraccion = False
@@ -194,7 +194,7 @@ def main():
                 elif nombre_yolo == 'vest': coordenadas_chalecos.append((x1, y1, x2, y2))
                 elif nombre_yolo == 'head_helmet': coordenadas_cascos.append((x1, y1, x2, y2))
                 elif nombre_yolo == 'glasses': coordenadas_lentes.append((x1, y1, x2, y2))
-                elif nombre_yolo == 'hand_glove': coordenadas_guantes.append((x1, y1, x2, y2))
+                elif nombre_yolo == 'face_mask': coordenadas_mascarilla.append((x1, y1, x2, y2))
 
                 # Solicitamos el text label y color semántico de nuestro diccionario UI. En defecto usamos gris.
                 texto_mostrar, color = CONFIGURACION_VISUAL.get(nombre_yolo, (nombre_yolo.upper(), (128, 128, 128)))
@@ -218,13 +218,13 @@ def main():
                 falta_chaleco = 1 if not tiene_equipo(px1, py1, px2, py2, coordenadas_chalecos) else 0
                 falta_casco = 1 if not tiene_equipo(px1, py1, px2, py2, coordenadas_cascos) else 0
                 falta_lentes = 1 if not tiene_equipo(px1, py1, px2, py2, coordenadas_lentes) else 0
-                falta_guantes = 1 if not tiene_equipo(px1, py1, px2, py2, coordenadas_guantes) else 0
+                falta_mascarilla = 1 if not tiene_equipo(px1, py1, px2, py2, coordenadas_mascarilla) else 0
 
                 # Formateo verbal UI: Añadimos a la lista textos descriptivos de las faltas computadas
                 if falta_chaleco: lista_faltas_texto.append("Chaleco")
                 if falta_casco: lista_faltas_texto.append("Casco")
                 if falta_lentes: lista_faltas_texto.append("Lentes")
-                if falta_guantes: lista_faltas_texto.append("Guantes")
+                if falta_mascarilla: lista_faltas_texto.append("Mascarilla")
                 
                 # Si una persona se quedó sin cualquiera de sus partes obligatorias de protección personal
                 if len(lista_faltas_texto) > 0:
@@ -233,8 +233,8 @@ def main():
                     
                     # Guardamos el estado exacto (One-Hot) y el ID para mandarlo al CSV en caso de cruzar el tiempo de confirmación
                     estado_infraccion = {
-                        'ID': p_id, 'Chaleco': falta_chaleco, 'Casco': falta_casco, 
-                        'Lentes': falta_lentes, 'Guantes': falta_guantes
+                        'ID': p_id, 'Chaleco': falta_chaleco, 'Casco': falta_casco,
+                        'Lentes': falta_lentes, 'Mascarilla': falta_mascarilla
                     }
                     
                     # UI Flotante para el trabajador en cuestión: Juntamos su lista de ausencias para pintársela de alarma
@@ -299,12 +299,12 @@ def main():
                         
                         # Anexamos la fila con datos en tupla estructurada lista para su evaluación en Pandas/Modelamiento Data Science
                         escritor.writerow([
-                            fecha_str, hora_str, 
+                            fecha_str, hora_str,
                             estado_infraccion['ID'],
                             estado_infraccion['Chaleco'],
                             estado_infraccion['Casco'],
                             estado_infraccion['Lentes'],
-                            estado_infraccion['Guantes'],
+                            estado_infraccion['Mascarilla'],
                             nombre_foto
                         ])
                     

@@ -1,7 +1,7 @@
 [project]
 name = "ppe-detection-system"
 version = "0.1.0"
-description = "Add your description here"
+description = "Sistema de detección de Equipo de Protección Personal (EPP) en tiempo real mediante visión computacional YOLOv8 — Dashboard HSE Argus Vision"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
